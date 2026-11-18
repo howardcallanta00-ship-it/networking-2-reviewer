@@ -297,5 +297,29 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--line-st
 .lightbox img { max-width: 100%; max-height: 100%; background: #fff; border-radius: 8px; }
 .lightbox button { position: absolute; top: 12px; right: 12px; background: #fff; color: #0F172A; }
 
+/* --- UX polish --- */
+button, a, .opt, summary, label { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+@media (hover: none) {
+  .opt:hover:not(:disabled) { border-color: var(--line); }
+  .btn:hover { border-color: var(--line-strong); }
+}
+.opt:active:not(:disabled) { transform: scale(.995); }
+.qtext:focus { outline: none; }
+.qend { min-height: 36px; padding: 0 12px; font-size: 13px; background: transparent; color: #CBD5E1; border-color: var(--hero-line); }
+.qend:hover { color: #fff; border-color: #60A5FA; }
+.pill.time.warn { background: #7F1D1D; color: #FECACA; animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .pill.time.warn { animation: none; } * { scroll-behavior: auto !important; } }
+.pick-count strong { color: var(--ink); }
+.verdict { flex-wrap: nowrap; }
+.verdict > div { flex: 1 1 auto; min-width: 0; }
+/* On phones the right/wrong tag goes under the answer instead of squeezing it. */
+@media (max-width: 560px) {
+  .opt { flex-wrap: wrap; column-gap: 12px; row-gap: 4px; }
+  .opt .t { flex: 1 1 calc(100% - 50px); }
+  .opt .tag { flex-basis: 100%; padding-left: 44px; }
+  .qcard, .explain { padding: 18px 16px; }
+}
+.offline-badge { position: fixed; right: 12px; bottom: 12px; z-index: 40; font-size: 12px; padding: 6px 10px; border-radius: 99px; background: var(--amber-soft); color: var(--amber-ink); border: 1px solid var(--line); }
 .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: var(--surface); padding: 10px 16px; border-radius: 10px; font-size: 14px; z-index: 60; box-shadow: var(--shadow); }
 .empty { text-align: center; padding: 32px 16px; color: var(--muted); }

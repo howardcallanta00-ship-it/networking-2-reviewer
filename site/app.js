@@ -176,6 +176,11 @@
 
   function buildSession(mode, opts) {
     opts = opts || {};
+    if (!opts.noConfirm && S && !S.submitted && S.ids) {
+      var answered = Object.keys(S.done).length;
+      if (answered > 0 && answered < S.ids.length &&
+          !confirm('You have an unfinished session (' + answered + ' of ' + S.ids.length + ' answered). Start a new one anyway?')) return;
+    }
     var pool;
     if (opts.ids) pool = opts.ids.slice();
     else {
@@ -221,10 +226,24 @@
   window.addEventListener('hashchange', render);
 
   var timerHandle = null;
+  var lastViewKey = null;
+  // Remember which control had focus so a re-render doesn't throw it away.
+  function focusKey() {
+    var el = document.activeElement;
+    if (!el || !el.getAttribute || el === document.body) return null;
+    var attrs = ['data-act', 'data-oi', 'data-i', 'data-mode', 'data-pref', 'data-ok', 'value', 'id'];
+    var sel = attrs.filter(function (a) { return el.hasAttribute(a) && !(a === 'value' && el.tagName !== 'INPUT'); })
+      .map(function (a) { return '[' + a + '="' + String(el.getAttribute(a)).replace(/"/g, '\\"') + '"]'; }).join('');
+    return sel || null;
+  }
   function render() {
     clearInterval(timerHandle);
     var h = location.hash || '#/';
     var app = $('#app');
+    var viewKey = h.split('?')[0] + '|' + (S && h.indexOf('#/q') === 0 ? S.i : '');
+    var sameView = viewKey === lastViewKey;
+    var fk = sameView ? focusKey() : null;
+    var y = window.scrollY;
     if (h.indexOf('#/q') === 0 && S) app.innerHTML = viewQuiz();
     else if (h.indexOf('#/results') === 0 && S) app.innerHTML = viewResults();
     else if (h.indexOf('#/browse') === 0) app.innerHTML = viewBrowse();
@@ -234,7 +253,16 @@
     if (h.indexOf('#/q') === 0 && S && S.deadline && !S.submitted) {
       timerHandle = setInterval(tick, 1000); tick();
     }
-    window.scrollTo(0, 0);
+    // Only jump to the top when the page or the question actually changed.
+    if (sameView) {
+      window.scrollTo(0, y);
+      if (fk) { var f = $(fk); if (f && !f.disabled) f.focus({ preventScroll: true }); }
+    } else {
+      window.scrollTo(0, 0);
+      var head = $('.qtext');
+      if (head && h.indexOf('#/q') === 0) { head.setAttribute('tabindex', '-1'); head.focus({ preventScroll: true }); }
+    }
+    lastViewKey = viewKey;
   }
 
   // ---------- shared chrome ----------
@@ -266,6 +294,7 @@
   function viewHome() {
     var t = totals(), s = streak(), goal = store.prefs.goal, done = store.days[today()] || 0;
     var resume = S && !S.submitted && S.ids && Object.keys(S.done).length < S.ids.length;
+    var noSel = store.prefs.groups.length ? '' : ' disabled';
     // weakest group with progress
     var weakest = null;
     DATA.groups.forEach(function (g) { var st = groupStats(g.id); if (st.acc != null && (!weakest || st.acc < weakest.acc)) weakest = { g: g, acc: st.acc }; });
@@ -286,11 +315,13 @@
       (s ? '<span class="pill streak" style="align-self:flex-start">' + icon('flame', 15, '#FCD34D') + s + '-day streak — keep it going</span>' : '') +
       '<h1>Ready to route<br>some packets?</h1><p>' + msg + '</p>' +
       '<div class="actions">' +
-      (resume ? '<button class="btn primary big" data-act="resume">' + icon('play', 16, '#fff') + 'Resume ' + esc(S.label.split(' ·')[0].toLowerCase()) + '</button>' :
-        '<button class="btn primary big" data-act="start" data-mode="practice">' + icon('play', 16, '#fff') + 'Start practice</button>') +
-      (resume ? '<button class="btn big" data-act="start" data-mode="practice">New practice</button>' : '') +
-      '<button class="btn big" data-act="start" data-mode="exam">Exam simulation</button>' +
-      '<button class="btn big" data-act="start" data-mode="flash">Flashcards</button></div></div>' +
+      (resume ? '<button class="btn primary big" data-act="resume">' + icon('play', 16, '#fff') + 'Resume ' + esc(S.label.split(' ·')[0].toLowerCase()) +
+        ' (' + Object.keys(S.done).length + '/' + S.ids.length + ')</button>' :
+        '<button class="btn primary big" data-act="start" data-mode="practice"' + noSel + '>' + icon('play', 16, '#fff') + 'Start practice</button>') +
+      (resume ? '<button class="btn big" data-act="start" data-mode="practice"' + noSel + '>New practice</button>' : '') +
+      '<button class="btn big" data-act="start" data-mode="exam"' + noSel + '>Exam simulation</button>' +
+      '<button class="btn big" data-act="start" data-mode="flash"' + noSel + '>Flashcards</button></div>' +
+      (noSel ? '<p style="font-size:14px;color:#FCD34D">Select at least one module group below to start.</p>' : '') + '</div>' +
       '<div class="goal-card"><div class="ring">' + ring(112, 10, done / goal, '#F59E0B', '#1E3A8A') +
       '<div class="val"><b>' + done + '</b><small>of ' + goal + ' today</small></div></div>' +
       '<div><b style="color:#fff">Daily goal</b><div style="font-size:13px;color:#CBD5E1;margin-top:4px">' +
@@ -416,6 +447,7 @@
       (exam && S.deadline && !S.submitted ? '<span class="pill time" id="timer">' + icon('clock', 14, '#FDBA74') + '<span>--:--</span></span>' : '') +
       (!exam ? '<span class="pill streak">' + icon('flame', 14, '#FCD34D') + 'Best run ' + best + '</span><span class="pill score">' + nCorrect + '/' + nDone + ' correct</span>' : '') +
       (exam && !S.submitted ? '<span class="pill score">' + nDone + '/' + S.ids.length + ' answered</span>' : '') +
+      (!exam && nDone ? '<button class="btn qend" data-act="finish" title="Stop here and see your results">End session</button>' : '') +
       '</div></div></div>';
 
     var order = S.order[id];
@@ -436,19 +468,23 @@
           (tag ? '<span class="tag">' + tag + '</span>' : '') + '</button>';
       }).join('') + '</div>';
       if (q.kind === 'order' && !S.reveal[id]) optsHtml = '<p class="hint" style="margin:0">Put these in the right order in your head (or on paper), then reveal the answer.</p>' + optsHtml;
+      if (q.kind === 'multi' && !showFeedback) {
+        optsHtml += '<p class="hint pick-count" style="margin:0">Choose ' + q.choose + ' · <strong>' + picked.length + ' selected</strong>' +
+          (picked.length >= q.choose ? ' — picking another swaps out your earliest choice' : '') + '</p>';
+      }
     }
 
     var verdict = '';
     if (showFeedback && auto) {
       var gr = grade(q, picked);
       verdict = gr.ok
-        ? '<div class="verdict ok"><span class="vi">' + icon('check', 20, '#fff') + '</span><div><b>Correct!</b><small>' + (best >= 3 ? best + ' in a row — you\'re on fire.' : 'Nice. Keep the run going.') + '</small></div></div>'
-        : '<div class="verdict bad"><span class="vi">' + icon('alert', 20, '#fff') + '</span><div><b>' + (gr.hits ? 'So close — ' + gr.hits + ' of ' + gr.need + ' right' : 'Not quite') + '</b><small>It\'s been added to Review missed, so you\'ll see it again.</small></div></div>';
+        ? '<div role="status" class="verdict ok"><span class="vi">' + icon('check', 20, '#fff') + '</span><div><b>Correct!</b><small>' + (best >= 3 ? best + ' in a row — you\'re on fire.' : 'Nice. Keep the run going.') + '</small></div></div>'
+        : '<div role="status" class="verdict bad"><span class="vi">' + icon('alert', 20, '#fff') + '</span><div><b>' + (gr.hits ? 'So close — ' + gr.hits + ' of ' + gr.need + ' right' : 'Not quite') + '</b><small>It\'s been added to Review missed, so you\'ll see it again.</small></div></div>';
     }
     if (!auto) {
       if (!S.reveal[id]) verdict = '<div class="selfgrade"><button class="btn primary" data-act="reveal">Reveal answer</button><span class="hint" style="align-self:center">' + (q.kind === 'match' ? 'Matching item — try it first, then compare.' : q.kind === 'statement' ? 'Fact to review — read it and check the explanation.' : '') + '</span></div>';
       else if (!done) verdict = '<div class="selfgrade"><button class="btn" style="border-color:var(--ok);color:var(--ok-ink)" data-act="self" data-ok="1">' + icon('check', 16) + 'I got it</button><button class="btn" style="border-color:var(--bad);color:var(--bad-ink)" data-act="self" data-ok="0">' + icon('x', 16) + 'I missed it</button></div>';
-      else verdict = '<div class="verdict ' + (S.res[id] ? 'ok' : 'bad') + '"><span class="vi">' + icon(S.res[id] ? 'check' : 'alert', 20, '#fff') + '</span><div><b>' + (S.res[id] ? 'Marked as known' : 'Marked as missed') + '</b></div></div>';
+      else verdict = '<div role="status" class="verdict ' + (S.res[id] ? 'ok' : 'bad') + '"><span class="vi">' + icon(S.res[id] ? 'check' : 'alert', 20, '#fff') + '</span><div><b>' + (S.res[id] ? 'Marked as known' : 'Marked as missed') + '</b></div></div>';
     }
 
     var flagged = !!store.flags[id];
@@ -467,7 +503,10 @@
       nav += (S.i === S.ids.length - 1 ? '' : '<button class="btn big" data-act="next">Next ' + icon('next', 16) + '</button>') +
         '<button class="btn primary big" data-act="submit">Submit exam</button>';
     } else if (auto && !done) {
-      nav += '<span class="hint">Press <kbd>Enter</kbd></span><button class="btn primary big" data-act="check"' + (picked.length ? '' : ' disabled') + '>Check answer</button>';
+      nav += (S.i < S.ids.length - 1 ? '<button class="btn big ghost" data-act="next" title="Come back to it later">Skip</button>' : '') +
+        '<span class="hint">Press <kbd>Enter</kbd></span><button class="btn primary big" data-act="check"' + (picked.length ? '' : ' disabled') + '>Check answer</button>';
+    } else if (!auto && !done && S.reveal[id]) {
+      nav += (S.i < S.ids.length - 1 ? '<button class="btn big ghost" data-act="next">Skip</button>' : '');
     } else {
       nav += (S.i === S.ids.length - 1
         ? '<button class="btn primary big" data-act="finish">See results</button>'
@@ -484,7 +523,15 @@
     var aside = '<aside><div class="card"><h3 style="font-family:var(--display)">Questions</h3><div class="grid-nav">' + gridBtns + '</div>' +
       '<div class="legend">' + (exam && !S.submitted ? '<span><i style="background:var(--brand-soft)"></i>Answered</span>' :
         '<span><i style="background:var(--ok-soft)"></i>Correct</span><span><i style="background:var(--bad-soft)"></i>Missed</span>') +
-      '<span><i style="background:var(--brand)"></i>Current</span><span><i style="background:var(--amber);border-radius:50%"></i>Flagged</span></div></div>' +
+      '<span><i style="background:var(--brand)"></i>Current</span><span><i style="background:var(--amber);border-radius:50%"></i>Flagged</span></div>' +
+      (function () {
+        var firstOpen = S.ids.findIndex(function (x, i) { return !S.done[x] && i !== S.i; });
+        var firstFlag = S.ids.findIndex(function (x, i) { return store.flags[x] && i !== S.i; });
+        var b = '';
+        if (firstOpen >= 0 && !(exam && S.submitted)) b += '<button class="btn" style="width:100%;margin-top:12px" data-act="jump" data-i="' + firstOpen + '">Go to next unanswered</button>';
+        if (firstFlag >= 0) b += '<button class="btn ghost" style="width:100%;margin-top:8px" data-act="jump" data-i="' + firstFlag + '">Go to a flagged question</button>';
+        return b;
+      })() + '</div>' +
       (mod ? '<div class="card"><h3 style="font-family:var(--display)">Topic mastery</h3><p class="muted" style="margin:0 0 8px;font-size:13px">Module ' + mod + ' · ' + esc(MODULES[mod] || '') + '</p>' +
         '<div class="mastery">' + [1, 2, 3, 4, 5].map(function (n) { return '<i class="' + (n <= lvl ? 'on' : '') + '"></i>'; }).join('') + '</div>' +
         '<p class="hint" style="margin:8px 0 0">Level ' + lvl + ' of 5' + (lvl < 5 ? ' · ' + (2 - ((ms ? ms.c : 0) % 2)) + ' more correct to level up' : ' · mastered') + '</p></div>' : '') +
@@ -504,7 +551,7 @@
       '<div class="pills"><span class="pill score">' + known + ' known</span></div></div></div>';
     var front = '<span class="face-label">QUESTION</span><h1 class="qtext">' + esc(q.question) + '</h1>' + stemHtml(q) +
       (q.options.length && q.kind !== 'order' ? '<ul class="opts-list" style="margin:0;padding-left:20px">' + q.options.map(function (o) { return '<li style="white-space:pre-line">' + esc(o.text) + '</li>'; }).join('') + '</ul>' : '');
-    var answer = back ? '<span class="face-label">ANSWER</span>' + answerKeyHtml(q) : '<p class="hint" style="margin:0">Tap the card or press <kbd>Enter</kbd> to flip.</p>';
+    var answer = back ? '<span class="face-label">ANSWER</span>' + answerKeyHtml(q) : '<p class="hint" style="margin:0">Tap the card or press <kbd>Enter</kbd> to flip · swipe or use <kbd>←</kbd> <kbd>→</kbd> to move between cards.</p>';
     var card = '<article class="qcard flash" style="--gc:' + gs.color + '" data-act="flip" tabindex="0" role="button" aria-label="Flip card">' +
       '<div class="qmeta"><div class="chips"><span class="chip" style="color:' + gs.color + '">' + esc(g.range.toUpperCase()) + ' · Q' + q.num + '</span></div></div>' + front + answer + '</article>';
     var controls = back
@@ -555,7 +602,7 @@
   }
 
   // ---------- BROWSE ----------
-  var browseState = { q: '', g: 'all', only: 'all' };
+  var browseState = { q: '', g: 'all', only: 'all', limit: 60 };
   function viewBrowse() {
     var opts = '<option value="all">All groups</option>' + DATA.groups.map(function (g) { return '<option value="' + g.id + '"' + (browseState.g === g.id ? ' selected' : '') + '>' + esc(g.range) + '</option>'; }).join('');
     return '<div class="hero">' + netArt() + header('browse') + '<section class="wrap hero-body" style="padding-bottom:28px"><div class="hero-copy"><h1>Browse all questions</h1><p>Search every question with its answer — handy for a quick read-through before the exam.</p></div></section></div>' +
@@ -575,15 +622,17 @@
       return hay.indexOf(term) >= 0;
     });
     $('#bcount').textContent = list.length + ' question' + (list.length === 1 ? '' : 's');
-    var shown = list.slice(0, 80);
+    var shown = list.slice(0, browseState.limit);
     $('#blist').innerHTML = shown.map(function (q) {
       var gs = GROUP_STYLE[q.group];
       return '<article class="bq" style="--gc:' + gs.color + '"><div class="chips" style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip" style="color:' + gs.color + '">' + esc(GROUP[q.group].range.toUpperCase()) + ' · Q' + q.num + '</span>' + (q.topic ? '<span class="chip">TOPIC ' + esc(q.topic) + '</span>' : '') + (store.flags[q.id] ? '<span class="chip" style="color:var(--amber-ink)">FLAGGED</span>' : '') + '</div>' +
         '<h2 class="qtext">' + esc(q.question) + '</h2>' + stemHtml(q) +
         (q.options.length ? '<ul class="opts-list">' + q.options.map(function (o, i) { return '<li class="' + (o.correct || q.kind === 'order' ? 'ok' : '') + (isCli(o.text) ? ' cli' : '') + '">' + (q.kind === 'order' ? (i + 1) + '. ' : (o.correct ? '✓ ' : '')) + esc(o.text) + '</li>'; }).join('') + '</ul>' : '') +
         '<details><summary>Explanation</summary>' + explainHtml(q, true).replace('class="explain"', 'class="explain" style="box-shadow:none;border:0;padding:12px 0 0"') + '</details></article>';
-    }).join('') + (list.length > shown.length ? '<p class="muted">Showing the first 80 — refine your search to see more.</p>' : '');
+    }).join('') + (list.length > shown.length ? '<button class="btn" id="bmore" style="align-self:center">Show more (' + (list.length - shown.length) + ' left)</button>' : '');
     bindZoom();
+    var more = $('#bmore');
+    if (more) more.addEventListener('click', function () { browseState.limit += 60; var y = window.scrollY; fillBrowse(); window.scrollTo(0, y); });
   }
 
   // ---------- PROGRESS ----------
@@ -618,7 +667,13 @@
     S.done[id] = true; S.res[id] = gr.ok;
     if (S.mode !== 'exam') record(id, gr.ok);
     saveSession(); render();
-    var ex = $('#explain'); if (ex && window.innerWidth < 900) ex.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Bring the verdict (and the start of the explanation) into view without a jarring jump.
+    var v = $('.verdict');
+    if (v) {
+      var r = v.getBoundingClientRect();
+      if (r.top < 70 || r.bottom > window.innerHeight - 40) v.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    var nb = $('.qnav [data-act="next"], .qnav [data-act="finish"]'); if (nb) nb.focus({ preventScroll: true });
   }
   function pick(oi) {
     var q = current(), id = q.id;
@@ -657,6 +712,11 @@
     if (ms <= 0) { clearInterval(timerHandle); toast('Time is up — submitting your exam.'); submitExam(true); return; }
     var m = Math.floor(ms / 60000), s = Math.floor((ms % 60000) / 1000);
     el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    var pill = $('#timer');
+    if (ms < 300000 && !pill.classList.contains('warn')) {
+      pill.classList.add('warn');
+      if (!S.warned) { S.warned = true; saveSession(); toast('5 minutes left.'); }
+    }
   }
 
   function bindZoom() {
@@ -665,8 +725,12 @@
         var box = document.createElement('div');
         box.className = 'lightbox'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Exhibit');
         box.innerHTML = '<img src="' + esc(img.getAttribute('src')) + '" alt="Exhibit enlarged"><button class="btn" aria-label="Close">Close</button>';
-        box.addEventListener('click', function () { box.remove(); });
+        var close = function () { box.remove(); document.removeEventListener('keydown', onKey); img.focus && img.focus({ preventScroll: true }); };
+        var onKey = function (e) { if (e.key === 'Escape') close(); };
+        box.addEventListener('click', close);
+        document.addEventListener('keydown', onKey);
         document.body.appendChild(box);
+        $('button', box).focus();
       });
     });
   }
@@ -677,7 +741,7 @@
       var act = el.getAttribute('data-act');
       if (act === 'zoom' || act === 'import' || act === 'group') return;
       el.addEventListener('click', function (ev) {
-        if (act === 'flip' && ev.target.closest('a, details, img')) return;
+        if (act === 'flip' && (ev.target.closest('a, details, img') || el.dataset.swiped)) return;
         handle(act, el, ev);
       });
     });
@@ -708,9 +772,26 @@
     var bs = $('#bsearch');
     if (bs) {
       fillBrowse();
-      bs.addEventListener('input', function () { browseState.q = bs.value; fillBrowse(); });
-      $('#bgroup').addEventListener('change', function (e) { browseState.g = e.target.value; fillBrowse(); });
-      $('#bonly').addEventListener('change', function (e) { browseState.only = e.target.value; fillBrowse(); });
+      var deb = null;
+      bs.addEventListener('input', function () {
+        clearTimeout(deb);
+        deb = setTimeout(function () { browseState.q = bs.value; browseState.limit = 60; fillBrowse(); }, 150);
+      });
+      $('#bgroup').addEventListener('change', function (e) { browseState.g = e.target.value; browseState.limit = 60; fillBrowse(); });
+      $('#bonly').addEventListener('change', function (e) { browseState.only = e.target.value; browseState.limit = 60; fillBrowse(); });
+      if (browseState.q) { bs.focus({ preventScroll: true }); }
+    }
+    // Flashcards: swipe left = next, swipe right = previous.
+    var fc = $('.flash');
+    if (fc) {
+      var sx = null, sy = null;
+      fc.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+      fc.addEventListener('touchend', function (e) {
+        if (sx == null) return;
+        var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+        sx = null;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) { fc.dataset.swiped = '1'; move(dx < 0 ? 1 : -1); }
+      });
     }
   }
 
@@ -747,7 +828,7 @@
       case 'finish': go('#/results'); break;
       case 'retry-wrong': {
         var wrong = S.ids.filter(function (x) { return S.res[x] !== true; });
-        buildSession(S.mode === 'exam' ? 'practice' : S.mode, { ids: wrong, label: 'Retry missed' }); break;
+        buildSession(S.mode === 'exam' ? 'practice' : S.mode, { ids: wrong, label: 'Retry missed', noConfirm: true }); break;
       }
       case 'review-session': S.i = 0; saveSession(); go('#/q'); break;
       case 'export': {
@@ -773,7 +854,9 @@
       var n = Number(e.key) - 1, oi = S.order[id][n];
       if (oi != null) { e.preventDefault(); pick(oi); }
     } else if (e.key === 'Enter') {
-      if (e.target.closest && e.target.closest('button, a, summary')) return; // let focused controls work
+      // A focused answer option shouldn't be re-toggled by Enter: treat Enter as "check / next".
+      // Other focused buttons and links keep their normal Enter behaviour.
+      if (e.target.closest && e.target.closest('button:not(.opt), a, summary')) return;
       e.preventDefault();
       if (S.mode === 'flash') { if (!S.reveal[id]) handle('flip'); else selfGrade(true); return; }
       if (AUTO[q.kind] && S.mode !== 'exam' && !S.done[id]) check();
@@ -787,6 +870,15 @@
       var ex = $('#explain'); if (ex) { ex.hidden = !ex.hidden; if (!ex.hidden) ex.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
     }
   });
+
+  // Offline indicator (the service worker keeps the reviewer usable without a connection).
+  function netBadge() {
+    var b = $('.offline-badge');
+    if (navigator.onLine) { if (b) b.remove(); return; }
+    if (!b) { b = document.createElement('div'); b.className = 'offline-badge'; b.setAttribute('role', 'status'); b.textContent = 'Offline — still works, progress is saved locally'; document.body.appendChild(b); }
+  }
+  window.addEventListener('online', netBadge);
+  window.addEventListener('offline', netBadge);
 
   // ---------- boot ----------
   fetch('data/questions.json')
