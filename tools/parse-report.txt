@@ -1,0 +1,90 @@
+m1-4-q20: image not saved in MHTML
+m1-4-q23: image not saved in MHTML
+m1-4-q27: image not saved in MHTML
+m1-4-q29: image not saved in MHTML
+m1-4-q31: image not saved in MHTML
+m1-4-q32: image not saved in MHTML
+m1-4-q33: image not saved in MHTML
+m1-4-q36: image not saved in MHTML
+m1-4-q38: image not saved in MHTML
+m1-4-q39: no explanation text; image not saved in MHTML
+m1-4-q40: image not saved in MHTML
+m1-4-q43: image not saved in MHTML
+m1-4-q44: image not saved in MHTML
+m1-4-q45: image not saved in MHTML
+m1-4-q46: image not saved in MHTML
+m1-4-q47: image not saved in MHTML
+m1-4-q49: image not saved in MHTML
+m1-4-q70: image not saved in MHTML
+m1-4-q71: image not saved in MHTML
+m1-4-q74: image not saved in MHTML
+m1-4-q77: image not saved in MHTML
+m1-4-q78: image not saved in MHTML
+m1-4-q79: no explanation text
+m10-13-q4: no explanation text
+m10-13-q27: no explanation text
+m10-13-q28: no explanation text
+m10-13-q37: no explanation text
+m10-13-q51: no explanation text
+m10-13-q52: no explanation text
+m10-13-q59: no explanation text
+m10-13-q60: no explanation text
+m10-13-q65: no explanation text
+m10-13-q66: no explanation text
+m10-13-q67: no explanation text
+m10-13-q69: no explanation text
+m10-13-q71: no explanation text
+m10-13-q72: no explanation text
+m10-13-q73: no explanation text
+m10-13-q74: no explanation text
+m10-13-q76: no explanation text
+m10-13-q79: no explanation text
+m10-13-q80: no explanation text
+m10-13-q82: no explanation text
+m14-16-q27: no explanation text
+m14-16-q30: no explanation text
+m14-16-q31: no explanation text
+m14-16-q38: no explanation text
+m14-16-q42: no explanation text
+m14-16-q46: no explanation text
+m14-16-q47: no explanation text
+m14-16-q51: no explanation text
+m14-16-q55: no explanation text
+m14-16-q56: no explanation text
+m14-16-q57: no explanation text
+m14-16-q58: no explanation text
+m14-16-q59: no explanation text
+m14-16-q61: no explanation text
+m14-16-q63: no explanation text
+m5-6-q1: no explanation text
+m5-6-q2: no explanation text
+m5-6-q4: no explanation text
+m5-6-q6: no explanation text
+m5-6-q9: no explanation text
+m5-6-q31: no explanation text
+m5-6-q33: image not saved in MHTML
+m5-6-q40: no explanation text
+m5-6-q42: no explanation text
+m5-6-q43: no explanation text
+m5-6-q44: no explanation text
+m5-6-q50: no explanation text
+m7-9-q2: no explanation text
+m7-9-q4: no explanation text
+m7-9-q5: no explanation text
+m7-9-q23: no options (shown as a fact to review); no explanation text
+m7-9-q30: no options (shown as a fact to review); no explanation text
+m7-9-q31: no explanation text
+m7-9-q33: no options (shown as a fact to review); no explanation text
+m7-9-q39: no explanation text
+m7-9-q41: no explanation text
+m7-9-q49: no explanation text
+m7-9-q51: no explanation text
+m7-9-q55: no explanation text
+m7-9-q58: no explanation text
+m7-9-q59: no explanation text
+m7-9-q62: no explanation text
+m7-9-q64: no explanation text
+m7-9-q65: no explanation text
+m7-9-q66: no explanation text
+m7-9-q67: no explanation text
+m7-9-q69: no explanation text

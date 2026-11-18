@@ -1,0 +1,12 @@
+# Render Blueprint — static site on the free plan.
+# Render > New > Blueprint > pick this repo, and it reads this file.
+services:
+  - type: web
+    name: networking-2-reviewer
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./site
+    headers:
+      - path: /data/*
+        name: Cache-Control
+        value: no-cache

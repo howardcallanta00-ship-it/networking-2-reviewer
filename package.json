@@ -1,0 +1,11 @@
+{
+  "name": "networking-2-reviewer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "parse": "node tools/parse.mjs"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0"
+  }
+}
