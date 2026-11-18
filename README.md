@@ -43,7 +43,7 @@ npm install
 node tools/parse.mjs "path/to/CCNA 2 v7 Modules 1 - 4 ... .mhtml" "path/to/...Modules 5 - 6....mhtml" ...
 ```
 
-The parser merges in the explanations from `site/data/explain/`.
+The parser merges in the explanations from `site/data/explain/`. Exhibit images that the saved pages referenced but did not embed are read from `tools/fetched-img/` (a local download cache, not committed); the extracted copies are already in `site/img/`.
 
 ## Run locally
 

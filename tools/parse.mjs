@@ -205,6 +205,15 @@ for (const file of process.argv.slice(2)) {
         imageStats.embedded++;
         return { src: `img/${name}` };
       }
+      // Not embedded in the MHTML: use a copy downloaded into tools/fetched-img/ if there is one.
+      const fetched = join(ROOT, 'tools', 'fetched-img', b.src.split('/').pop());
+      if (existsSync(fetched)) {
+        const ext = fetched.split('.').pop().toLowerCase();
+        const name = `${id}-${k}.${ext === 'jpeg' ? 'jpg' : ext}`;
+        writeFileSync(join(IMG_DIR, name), readFileSync(fetched));
+        imageStats.embedded++;
+        return { src: `img/${name}` };
+      }
       imageStats.missing++;
       return { src: null, remote: b.src };
     };

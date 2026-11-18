@@ -1,25 +1,4 @@
-m1-4-q20: image not saved in MHTML
-m1-4-q23: image not saved in MHTML
-m1-4-q27: image not saved in MHTML
-m1-4-q29: image not saved in MHTML
-m1-4-q31: image not saved in MHTML
-m1-4-q32: image not saved in MHTML
-m1-4-q33: image not saved in MHTML
-m1-4-q36: image not saved in MHTML
-m1-4-q38: image not saved in MHTML
-m1-4-q39: no explanation text; image not saved in MHTML
-m1-4-q40: image not saved in MHTML
-m1-4-q43: image not saved in MHTML
-m1-4-q44: image not saved in MHTML
-m1-4-q45: image not saved in MHTML
-m1-4-q46: image not saved in MHTML
-m1-4-q47: image not saved in MHTML
-m1-4-q49: image not saved in MHTML
-m1-4-q70: image not saved in MHTML
-m1-4-q71: image not saved in MHTML
-m1-4-q74: image not saved in MHTML
-m1-4-q77: image not saved in MHTML
-m1-4-q78: image not saved in MHTML
+m1-4-q39: no explanation text
 m1-4-q79: no explanation text
 m10-13-q4: no explanation text
 m10-13-q27: no explanation text
@@ -62,7 +41,6 @@ m5-6-q4: no explanation text
 m5-6-q6: no explanation text
 m5-6-q9: no explanation text
 m5-6-q31: no explanation text
-m5-6-q33: image not saved in MHTML
 m5-6-q40: no explanation text
 m5-6-q42: no explanation text
 m5-6-q43: no explanation text

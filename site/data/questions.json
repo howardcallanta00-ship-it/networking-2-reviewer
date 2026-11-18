@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-18T13:14:06.570Z",
+ "generated": "2026-11-18T13:31:12.235Z",
  "groups": [
   {
    "id": "m1-4",
@@ -764,13 +764,11 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam.png"
+     "src": "img/m1-4-q20-1.png"
     },
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/2020-01-20_230521.jpg"
+     "src": "img/m1-4-q20-2.jpg"
     }
    ],
    "options": [],
@@ -867,8 +865,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-SRWE-%E2%80%93-Modules-1-%E2%80%93-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-23.png"
+     "src": "img/m1-4-q23-1.png"
     }
    ],
    "options": [
@@ -1036,8 +1033,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA-2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-27.jpg"
+     "src": "img/m1-4-q27-1.jpg"
     }
    ],
    "options": [
@@ -1113,8 +1109,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-SRWE-%E2%80%93-Modules-1-%E2%80%93-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-29.png"
+     "src": "img/m1-4-q29-1.png"
     }
    ],
    "options": [
@@ -1194,8 +1189,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-31.png"
+     "src": "img/m1-4-q31-1.png"
     }
    ],
    "options": [],
@@ -1217,8 +1211,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-32.png"
+     "src": "img/m1-4-q32-1.png"
     }
    ],
    "options": [
@@ -1261,8 +1254,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/2024-10-08_141221.jpg"
+     "src": "img/m1-4-q33-1.jpg"
     }
    ],
    "options": [],
@@ -1358,8 +1350,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/i297770v1n1_297770.png"
+     "src": "img/m1-4-q36-1.png"
     }
    ],
    "options": [
@@ -1465,8 +1456,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-38.jpg"
+     "src": "img/m1-4-q38-1.jpg"
     }
    ],
    "options": [
@@ -1505,8 +1495,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-39.png"
+     "src": "img/m1-4-q39-1.png"
     }
    ],
    "options": [
@@ -1550,8 +1539,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2020/09/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-40-1.png"
+     "src": "img/m1-4-q40-1.png"
     }
    ],
    "options": [
@@ -1676,8 +1664,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-43.png"
+     "src": "img/m1-4-q43-1.png"
     }
    ],
    "options": [
@@ -1725,8 +1712,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-44.png"
+     "src": "img/m1-4-q44-1.png"
     }
    ],
    "options": [
@@ -1777,8 +1763,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/Q45.jpg"
+     "src": "img/m1-4-q45-1.jpg"
     }
    ],
    "options": [
@@ -1821,8 +1806,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-46.png"
+     "src": "img/m1-4-q46-1.png"
     }
    ],
    "options": [
@@ -1861,8 +1845,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-47.png"
+     "src": "img/m1-4-q47-1.png"
     }
    ],
    "options": [
@@ -1944,8 +1927,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-49.png"
+     "src": "img/m1-4-q49-1.png"
     }
    ],
    "options": [
@@ -2675,8 +2657,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-70.jpg"
+     "src": "img/m1-4-q70-1.jpg"
     }
    ],
    "options": [
@@ -2719,8 +2700,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-71.jpg"
+     "src": "img/m1-4-q71-1.jpg"
     }
    ],
    "options": [
@@ -2843,8 +2823,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/CCNA2-v7-Modules-1-4-Switching-Concepts-VLANs-and-InterVLAN-Routing-Exam-Answers-74.png"
+     "src": "img/m1-4-q74-1.png"
     }
    ],
    "options": [
@@ -2966,8 +2945,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/2020-01-20_224244.jpg"
+     "src": "img/m1-4-q77-1.jpg"
     },
     {
      "type": "text",
@@ -3014,8 +2992,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2019/12/2020-01-20_225135.jpg"
+     "src": "img/m1-4-q78-1.jpg"
     }
    ],
    "options": [],
@@ -9888,8 +9865,7 @@
    "stem": [
     {
      "type": "img",
-     "src": null,
-     "remote": "https://itexamanswers.net/wp-content/uploads/2020/01/CCNA-2-v7-Modules-5-6-Redundant-Networks-Exam.png"
+     "src": "img/m5-6-q33-1.png"
     }
    ],
    "options": [
